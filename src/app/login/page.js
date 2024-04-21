@@ -1,9 +1,46 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const data = {
+      email: email,
+      password: password,
+    };
+
+    const url = "http://localhost:8080/users/login";
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status : ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      console.log("Login Token", result.token);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+
+
   return (
     <>
-      <section class="bg-gray-50 dark:bg-gray-900">
+      <section class="bg-[#74b9ff] dark:bg-gray-900">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
             href="#"
@@ -11,17 +48,21 @@ const Login = () => {
           >
             <img
               class="w-8 h-8 mr-2"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+              src="https://cdn-icons-png.flaticon.com/128/2210/2210197.png"
               alt="logo"
             />
-            Flowbite
+            PageMarket
           </a>
           <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Sign in to your account
+                Sign in
               </h1>
-              <form class="space-y-4 md:space-y-6" action="#">
+              <form
+                class="space-y-4 md:space-y-6"
+                action="#"
+                onSubmit={handleSubmit}
+              >
                 <div>
                   <label
                     for="email"
@@ -34,8 +75,9 @@ const Login = () => {
                     name="email"
                     id="email"
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required=""
+                    placeholder="name@gmail.com"
+                    required
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div>
@@ -51,7 +93,8 @@ const Login = () => {
                     id="password"
                     placeholder="••••••••"
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div class="flex items-center justify-between">
@@ -103,6 +146,6 @@ const Login = () => {
       </section>
     </>
   );
-}
+};
 
 export default Login;
