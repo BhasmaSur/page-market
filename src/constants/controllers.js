@@ -4,6 +4,8 @@ export const CONTROLLER = {
 
 export const OPERATION = {
     ADD : "add",
+    LOGIN : "login",
+    AUTHENTICATE : "auth",
 }
 
 export const METHODS = {

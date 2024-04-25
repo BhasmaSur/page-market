@@ -7,8 +7,6 @@ import { ROLE } from "../../../constants/roles";
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
 
   useEffect(() => {
     httpService(null, METHODS.get, null, CONTROLLER.USER).then((users)=>{
@@ -18,36 +16,10 @@ const Dashboard = () => {
     })
   }, []);
 
-  const handleClick = () => {
-    const userPayload = {
-      email_id: username,
-      password: password,
-      role: ROLE.USER,
-      active: 1,
-    };
-    httpService(OPERATION.ADD, METHODS.post, userPayload, CONTROLLER.USER).then(
-      (user) => {
-        if (user) {
-          alert("User added successfully")
-        }
-      }
-    );
-
-  };
-
   return (
     <>
-      <div>
-        <input
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="user name"
-        />
-        <input
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="password"
-        />
-        <button onClick={handleClick}>submit</button>
-      </div>
+      Dashboard
+
       {userData &&
         userData.map((user) => {
           return <div>{user.email_id}</div>;
