@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getCookieObject } from "../utility/loginUtils";
 
 const httpService = (
   serviceUrl,
@@ -11,11 +12,11 @@ const httpService = (
   additionalConfig = {}
 ) => {
   let BASE_URL = "https://page-market.vercel.app/api"; //provide url
-
+  // let BASE_URL = "http://localhost:3000/api";
   const config = {
     headers: {
       "Access-Control-Allow-Orgin": "*",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     ...additionalConfig,
   };
@@ -25,26 +26,22 @@ const httpService = (
 
   if (multipart) config.headers["Content-Type"] = "multipart/form-data";
   if (stream) config["responseType"] = "blob";
-//   const { getSessionData } = auth();
-//   let { accessToken } = getSessionData();
-//   if (
-//     accessToken &&
-//     !serviceUrl.includes("search") &&
-//     !serviceUrl.includes("stats")
-//   ) {
-//     config.headers.Authorization = `Bearer ${accessToken}`;
-//   }
 
-  let url = "";  
-  if(serviceUrl){
+  let url = "";
+  if (serviceUrl) {
     url = `${BASE_URL}/${service}/${serviceUrl}`;
-  }else{
+  } else {
     url = `${BASE_URL}/${service}`;
+  }
+
+  const { jwtToken } = getCookieObject();
+  if (jwtToken && !url.includes("/user/login") && !url.includes("/user/add")) {
+    config.headers.Authorization = jwtToken;
   }
 
   switch (type) {
     case "get": {
-      const promise = axios.get(url,null,config);
+      const promise = axios.get(url, config);
       return promise;
     }
     case "post":
