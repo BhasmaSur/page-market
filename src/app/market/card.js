@@ -1,6 +1,27 @@
 "use client";
+import { useRouter } from "next/navigation";
 
-const Card = ({name, followers, imgurl, profileurl}) => {
+const Card = ({
+  id,
+  name,
+  followers,
+  imgurl,
+  profileurl,
+  audienceType,
+  pageType,
+  postPricing,
+  reelPricing,
+  storyPricing,
+}) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push(
+      `/bid?pageid=${id}&name=${name}&followers=${followers}&audienceType=${audienceType}&pageType=${pageType}&postPricing=${postPricing}&reelPricing=${reelPricing}&storyPricing=${storyPricing}&imgurl=${imgurl}`  
+      // `/bid?imgurl=${encodeURIComponent(imgurl)}&name=${encodeURIComponent(name)}`
+    );
+  };
+
   return (
     <>
       <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-4">
@@ -17,13 +38,10 @@ const Card = ({name, followers, imgurl, profileurl}) => {
           <span class="text-sm text-gray-500 dark:text-gray-400">
             {followers} followers
           </span>
-          <div class="flex mt-4 md:mt-6">
-            <a
-              href="#"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
+          <div class="flex mt-4 md:mt-6" onClick={handlePress}>
+            <div class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
               Bid
-            </a>
+            </div>
             <a
               href={profileurl}
               target="_blank"
