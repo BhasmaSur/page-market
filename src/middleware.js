@@ -5,7 +5,7 @@ import { OPERATION } from "./constants/controllers";
 //   matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)']
 // }
 
-const protectedPages = ["page/dashboard", "api/user"];
+const protectedPages = ["/dashboard", "api/user"];
 const notProtectedApis = ["api/user/add", "api/user/login", "api/user/auth"];
 const API = "api";
 const AUTH_HEADER = "Authorization";
@@ -21,7 +21,7 @@ export async function middleware(req) {
     !url.includes(API) &&
     protectedPages.some((pPage) => url.includes(pPage))
   ) {
-    return NextResponse.redirect(new URL("/page/login", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   if (
@@ -44,7 +44,7 @@ export async function middleware(req) {
       if (userAuthResponse.status === 200) {
         NextResponse.next();
       } else {
-        return NextResponse.redirect(new URL("/page/login", req.url));
+        return NextResponse.redirect(new URL("/login", req.url));
       }
   }
 
