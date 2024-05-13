@@ -1,42 +1,46 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
+import { CONTROLLER, METHODS, OPERATION } from "../../constants/controllers";
+import httpService from "../../services/httpService";
+import { USER } from "../../constants/messages";
+import { redirect, useRouter } from "next/navigation";
+import { setCookieDetails } from "../../utility/loginUtils";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const data = {
-      email: email,
+    const userPayload = {
+      email_id: "test",
       password: password,
     };
-
-    const url = "http://localhost:8080/users/login";
-
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status : ${response.status}`);
+      const response = await httpService(
+        OPERATION.LOGIN,
+        METHODS.post,
+        userPayload,
+        CONTROLLER.USER
+      );
+      if (response.status === 200) {
+        setCookieDetails({
+          username: email,
+          jwtToken: response.data.jwtToken,
+          type: "PROFILE",
+        });
+        router.push("/dashboard");
+      } else {
+        alert(USER.USER_WRONG_CREDS.message);
       }
-
-      const result = await response.json();
-
-      console.log("Login Token", result.token);
     } catch (error) {
-      console.log("Error:", error);
+      alert(USER.USER_WRONG_CREDS.message);
     }
   };
 
-
+  const redirectToSignUp = () =>{
+    router.push("/register");
+  }
 
   return (
     <>
@@ -65,7 +69,7 @@ const Login = () => {
               >
                 <div>
                   <label
-                    for="email"
+                    // for="email"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your email
@@ -76,7 +80,7 @@ const Login = () => {
                     id="email"
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@gmail.com"
-                    required
+                    // required
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
@@ -127,6 +131,7 @@ const Login = () => {
                 <button
                   type="submit"
                   class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  onClick={redirectToSignUp}
                 >
                   Sign in
                 </button>
