@@ -9,7 +9,15 @@ declare module '@material-tailwind/react' {
     placeholder?
   }
 
+  interface TabsHeader{
+    placeholder?
+    onPointerEnterCapture?
+    onPointerLeaveCapture?
+  }
+
   interface TypographyProps {
     placeholder?
+    onPointerEnterCapture?
+    onPointerLeaveCapture?
   }
 }
