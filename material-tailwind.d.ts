@@ -60,4 +60,18 @@ declare module '@material-tailwind/react' {
     onPointerEnterCapture?
     onPointerLeaveCapture?
   }
+
+  interface AccordionProps {
+    placeholder?
+    onPointerEnterCapture?
+    onPointerLeaveCapture?
+  }
+
+  interface AccordionHeaderProps {
+    placeholder?
+    onPointerEnterCapture?
+    onPointerLeaveCapture?
+  }
+  
+  
 }
